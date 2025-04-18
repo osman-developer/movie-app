@@ -6,9 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LocalMovieProfile } from './local-movie.profile';
 import { Rating } from 'src/modules/rating/rating.entity';
 import { RatingModule } from 'src/modules/rating/rating.module';
+import { RedisCacheModule } from 'src/common/cache/redis-cache.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Movie, Rating]), RatingModule],
+  imports: [
+    TypeOrmModule.forFeature([Movie, Rating]),
+    RatingModule,
+    RedisCacheModule,
+  ],
   providers: [LocalMoviesService, LocalMovieProfile],
   controllers: [LocalMovieController],
 })

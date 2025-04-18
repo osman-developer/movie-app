@@ -1,4 +1,3 @@
-// tmdb-response.dto.ts
 export interface PaginatedResponse<T> {
   page: number;
   results: T[];

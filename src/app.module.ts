@@ -10,6 +10,7 @@ import { UserModule } from './modules/user/user.module';
 import { GenreModule } from './modules/genre/genre.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
+import { RedisCacheModule } from './common/cache/redis-cache.module';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { classes } from '@automapper/classes';
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
-
+    RedisCacheModule,
     MovieModule,
     RatingModule,
     UserModule,

@@ -17,25 +17,63 @@ export class RatingsService {
   ) {}
 
   // Get average rating for a movie
-  async getAverageRating(movieId: number): Promise<number> {
-    const movie = await this.movieRepository.findOne({
-      where: { externalId: movieId },
-    });
-    if (!movie) {
-      throw new NotFoundException('Movie not found');
-    }
+  async getAverageRatings(externalMovieIds: number[]): Promise<any> {
+    if (!externalMovieIds.length) return [];
 
+    const ratings = await this.getRatings(externalMovieIds);
+
+    const response = this.computeAverageRatings(ratings, externalMovieIds);
+    return response || [];
+  }
+
+  private async getRatings(externalMovieIds: number[]) {
+    // Step 1: Fetch all movies with externalIds in externalMovieIds
+    const movies = await this.movieRepository.find({
+      where: externalMovieIds.map((id) => ({ externalId: id })),
+    });
+
+    //Step 2: mapping only the externalMovieIds that exist
+    const mappedExternalMoviesIds = movies.map((m) => m.externalId);
+
+    if (!mappedExternalMoviesIds.length) return [];
+
+    // Step 3: Fetch all ratings where externalMovieId is in mappedExternalMoviesIds
     const ratings = await this.ratingRepository.find({
-      where: { externalMovieId: movie.externalId },
+      where: mappedExternalMoviesIds.map((id) => ({ externalMovieId: id })),
     });
 
-    if (!ratings.length) {
-      return 0;
+    return ratings || [];
+  }
+
+  private computeAverageRatings(
+    ratings: Rating[],
+    movieIds: number[],
+  ): Record<number, number> {
+    const ratingMap: {} = {};
+
+    //make array like that ar[externalMovieId] to make it easily accessible
+    for (const rating of ratings) {
+      const id = rating.externalMovieId;
+      if (!ratingMap[id]) ratingMap[id] = [];
+      ratingMap[id].push(Number(rating.value));
     }
 
-    const sum = ratings.reduce((acc, r) => acc + Number(r.value), 0);
-    const average = sum / ratings.length;
+    const result: {} = {};
 
-    return parseFloat(average.toFixed(2));
+    for (const id of movieIds) {
+      const values = ratingMap[id] || [];
+      const average =
+        values.length > 0
+          ? parseFloat(
+              (values.reduce((acc, v) => acc + v, 0) / values.length).toFixed(
+                2,
+              ),
+            )
+          : 0;
+
+      result[id] = average;
+    }
+
+    return result;
   }
 }

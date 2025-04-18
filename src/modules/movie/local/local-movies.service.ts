@@ -48,11 +48,11 @@ export class LocalMoviesService {
   ): Promise<PaginatedResponse<GetMovieDto>> {
     const { page, pageSize, searchTerm, filters } = query;
 
+    // Try to get from cache
     const cacheKey = `movies:${page}-${pageSize}:${searchTerm || ''}:${filters
       .map((f) => `${f.field}:${f.value}`)
       .join(',')}`;
 
-    // Try to get from cache
     const cached =
       await this.redisCacheService.get<PaginatedResponse<GetMovieDto>>(
         cacheKey,
@@ -64,6 +64,7 @@ export class LocalMoviesService {
       .createQueryBuilder('movie')
       .leftJoinAndSelect('movie.genres', 'genre');
 
+    //Build dynamic query (search,filter,pagination..)
     BaseQueryHelper.apply(qb, {
       search: searchTerm
         ? { term: searchTerm, fields: ['movie.title', 'movie.original_title'] }
@@ -74,6 +75,7 @@ export class LocalMoviesService {
 
     const [movies, total] = await qb.getManyAndCount();
 
+    //get the average ratings for all movies
     const mappedExternalMoviesIds = movies.map((m) => m.externalId);
     const moviesRating = await this.ratingsService.getAverageRatings(
       mappedExternalMoviesIds,

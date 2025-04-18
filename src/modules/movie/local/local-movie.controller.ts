@@ -23,9 +23,14 @@ export class LocalMovieController {
   }
 
   @Get()
+  @ApiOperation({
+    summary:
+      'Call api with dynamic queries :localhost:3000/movie?page=1&pageSize=6&searchTerm=Minecraft&filters=genre.name:Fantasy',
+  })
   @ApiResponse({
     status: 200,
-    description: 'Paginated list of movies',
+    description:
+      'Paginated list of movies (applying filters,searchterms.. if any)',
   })
   async getMovies(
     @Query() query: QueryParamsDto,

@@ -23,6 +23,13 @@ export class LocalMoviesService {
   ) {}
 
   async getMovieById(movieId: number): Promise<GetMovieDto> {
+    // Try to get from cache
+    const cacheKey = `getMovieById:${movieId}`;
+    const cached = await this.redisCacheService.get<GetMovieDto>(cacheKey);
+
+    if (cached) return cached;
+
+    // No cache, fetch from DB
     const movie = await this.movieRepository.findOne({
       where: { externalId: movieId },
       relations: ['genres'],
@@ -39,6 +46,9 @@ export class LocalMoviesService {
     ]);
 
     getMovieDto['averageRating'] = avgRating[movie.externalId] ?? 0;
+
+    // Save to cache (TTL = 300s = 5 minutes)
+    await this.redisCacheService.set(cacheKey, getMovieDto, 300);
 
     return getMovieDto;
   }

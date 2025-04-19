@@ -13,8 +13,7 @@ export class Rating {
   @ManyToOne(() => User, (user) => user.ratings)
   @JoinColumn({ name: 'userId' })
   user: User;
-
-  // Change the relation to Movie to use 'externalId' instead of 'id'
+  
   @ManyToOne(() => Movie, (movie) => movie.ratings)
   @JoinColumn({ name: 'externalMovieId', referencedColumnName: 'externalId' }) // Reference externalId in Movie entity
   movie: Movie;

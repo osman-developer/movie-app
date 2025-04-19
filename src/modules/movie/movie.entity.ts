@@ -13,6 +13,7 @@ import { User } from '../user/user.entity';
 import { Rating } from '../rating/rating.entity';
 import { Genre } from '../genre/genre.entity';
 import { AutoMap } from '@automapper/classes';
+import { Watchlist } from '../watchlist/watchlist.entity';
 
 @Entity('movies')
 export class Movie {
@@ -38,8 +39,8 @@ export class Movie {
   })
   genres: Genre[];
 
-  @ManyToMany(() => User, (user) => user.watchlist)
-  watchlist: User[];
+  @OneToMany(() => Watchlist, (userWatchlist) => userWatchlist.movie)
+  watchlist: Watchlist[];
 
   @OneToMany(() => Rating, (rating) => rating.movie)
   ratings: Rating[];

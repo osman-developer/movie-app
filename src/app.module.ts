@@ -12,6 +12,7 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { RedisCacheModule } from './common/cache/cache.module';
 import { RatingController } from './modules/rating/rating.controller';
+import { WatchlistModule } from './modules/watchlist/watchlist.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { RatingController } from './modules/rating/rating.controller';
     RatingModule,
     UserModule,
     GenreModule,
+    WatchlistModule,
   ],
   controllers: [AppController, RatingController],
   providers: [AppService],

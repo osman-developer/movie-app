@@ -54,8 +54,6 @@ export class HttpHelper {
       headers: baseConfig.headers,
       params: { ...baseConfig.params, ...params },
       data,
-      // Preserve any other Axios config options that might be added in the future
-      ...baseConfig,
     };
 
     try {

@@ -164,7 +164,7 @@ export class TmdbSyncService implements OnModuleInit {
     return { movies, genres };
   }
 
-  // Handles sync of genres from the Api and returns them
+  // Handles sync of genres from the TMDB API and returns them
   async syncGenres(): Promise<GetTmdbGenreDto[]> {
     try {
       // Call the helper's makeRequest function to fetch the genres
@@ -193,11 +193,13 @@ export class TmdbSyncService implements OnModuleInit {
     }
   }
 
-  // Handles sync of movies from the Api and returns them
+  // Handles sync of movies from the TMDB API and returns them
   async syncMovies(): Promise<GetTmdbMovieDto[]> {
     const moviesList: GetTmdbMovieDto[] = [];
+    const seenExternalIds = new Set<number>(); // Set to track unique movie IDs
 
     try {
+      // Call the helper's makeRequest function to fetch the movies
       for (let page = 1; page <= this.maxPageCount; page++) {
         const response = await this.httpHelper.makeRequest<
           TmdbPaginatedResponse<GetTmdbMovieDto>
@@ -217,14 +219,29 @@ export class TmdbSyncService implements OnModuleInit {
           );
           continue;
         }
-        const movies = response.data.results || [];
-        moviesList.push(...movies);
+        const moviesResponse = response.data.results || [];
+        this.removeDuplicateMovies(moviesResponse, seenExternalIds, moviesList);
       }
 
       return moviesList;
     } catch (error) {
       Logger.error(`Error while fetching TMDB movies: ${error.message}`);
       return [];
+    }
+  }
+
+  // Movies coming from TMDB API has some duplicates,so we make sure to remove the duplicates before inserting
+  private removeDuplicateMovies(
+    moviesResponse: GetTmdbMovieDto[],
+    seenExternalIds: Set<number>,
+    moviesList: GetTmdbMovieDto[],
+  ): void {
+    for (const movie of moviesResponse) {
+      // Check if the movie ID has already been added to the seen set
+      if (!seenExternalIds.has(movie.id)) {
+        seenExternalIds.add(movie.id); // Mark the ID as seen
+        moviesList.push(movie); // Add movie to the list
+      }
     }
   }
 }

@@ -1,14 +1,14 @@
 import { Entity, PrimaryColumn, ManyToOne, JoinColumn, Column } from 'typeorm';
 import { Movie } from '../movie/movie.entity';
-import { User } from '../user/rating.entity';
+import { User } from '../user/user.entity';
 
-@Entity('user_movie_rating_relation') // Change the table name to 'user_movie_rating_relation'
+@Entity('user_movie_rating_relation')
 export class Rating {
   @PrimaryColumn()
   userId: number;
 
   @PrimaryColumn()
-  externalMovieId: number; // Rename movieId to externalMovieId
+  externalMovieId: number;
 
   @ManyToOne(() => User, (user) => user.ratings)
   @JoinColumn({ name: 'userId' })

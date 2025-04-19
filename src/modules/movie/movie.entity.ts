@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../user/rating.entity';
+import { User } from '../user/user.entity';
 import { Rating } from '../rating/rating.entity';
 import { Genre } from '../genre/genre.entity';
 import { AutoMap } from '@automapper/classes';

@@ -10,7 +10,8 @@ import { UserModule } from './modules/user/user.module';
 import { GenreModule } from './modules/genre/genre.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
-import { RedisCacheModule } from './common/cache/redis-cache.module';
+import { RedisCacheModule } from './common/cache/cache.module';
+import { RatingController } from './modules/rating/rating.controller';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { RedisCacheModule } from './common/cache/redis-cache.module';
     UserModule,
     GenreModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, RatingController],
   providers: [AppService],
 })
 export class AppModule {}

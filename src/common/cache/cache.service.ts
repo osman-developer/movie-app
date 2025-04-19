@@ -3,8 +3,8 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
 @Injectable()
-export class RedisCacheService {
-  private readonly logger = new Logger(RedisCacheService.name);
+export class CacheService {
+  private readonly logger = new Logger(CacheService.name);
 
   constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 
@@ -33,5 +33,10 @@ export class RedisCacheService {
     } catch (error) {
       this.logger.error(`Error deleting cache for key "${key}":`, error);
     }
+  }
+
+  async clearCache(): Promise<void> {
+    //this func could be more specific to delete certain things but for simplicity now clearing everything
+    this.cacheManager.clear();
   }
 }

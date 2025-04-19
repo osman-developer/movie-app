@@ -10,7 +10,7 @@ import { RatingsService } from 'src/modules/rating/rating.service';
 import { QueryParamsDto } from 'src/common/dtos/query-params.dto';
 import { PaginatedResponse } from 'src/common/interfaces/local/paginated-response';
 import { BaseQueryHelper } from 'src/common/helpers/base-query-helper';
-import { RedisCacheService } from 'src/common/cache/redis-cache.service';
+import { CacheService } from 'src/common/cache/cache.service';
 
 @Injectable()
 export class LocalMoviesService {
@@ -19,13 +19,13 @@ export class LocalMoviesService {
     private readonly movieRepository: Repository<Movie>,
     private readonly ratingsService: RatingsService,
     @InjectMapper() private readonly mapper: Mapper,
-    private readonly redisCacheService: RedisCacheService,
+    private readonly cacheService: CacheService,
   ) {}
 
   async getMovieById(movieId: number): Promise<GetMovieDto> {
     // Try to get from cache
     const cacheKey = `getMovieById:${movieId}`;
-    const cached = await this.redisCacheService.get<GetMovieDto>(cacheKey);
+    const cached = await this.cacheService.get<GetMovieDto>(cacheKey);
 
     if (cached) return cached;
 
@@ -48,7 +48,7 @@ export class LocalMoviesService {
     getMovieDto['averageRating'] = avgRating[movie.externalId] ?? 0;
 
     // Save to cache (TTL = 300s = 5 minutes)
-    await this.redisCacheService.set(cacheKey, getMovieDto, 300);
+    await this.cacheService.set(cacheKey, getMovieDto, 300);
 
     return getMovieDto;
   }
@@ -64,9 +64,7 @@ export class LocalMoviesService {
       .join(',')}`;
 
     const cached =
-      await this.redisCacheService.get<PaginatedResponse<GetMovieDto>>(
-        cacheKey,
-      );
+      await this.cacheService.get<PaginatedResponse<GetMovieDto>>(cacheKey);
     if (cached) return cached;
 
     // No cache, fetch from DB
@@ -105,7 +103,7 @@ export class LocalMoviesService {
     };
 
     // Save to cache (TTL = 300s = 5 minutes)
-    await this.redisCacheService.set(cacheKey, response, 300);
+    await this.cacheService.set(cacheKey, response, 300);
 
     return response;
   }

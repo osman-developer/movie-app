@@ -1,5 +1,11 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+} from '@nestjs/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AddRatingDto } from './dto/addRating.dto';
 import { RatingsService } from './rating.service';
 
@@ -19,5 +25,13 @@ export class RatingController {
   })
   async addRating(@Body() addRatingDto: AddRatingDto) {
     return this.ratingsService.addRating(addRatingDto);
+  }
+
+  @Delete('remove-rate/:userId/:externalMovieId')
+  async removeRating(
+    @Param('userId') userId: number,
+    @Param('externalMovieId') externalMovieId: number,
+  ) {
+    return this.ratingsService.removeRating(userId, externalMovieId);
   }
 }

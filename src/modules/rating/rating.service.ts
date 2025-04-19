@@ -80,6 +80,21 @@ export class RatingsService {
     await this.ratingRepository.save(newRating);
   }
 
+  // Method to remove a rating based on userId and externalMovieId
+  async removeRating(userId: number, externalMovieId: number): Promise<void> {
+    try {
+      const rating = await this.ratingRepository.findOne({
+        where: { userId, externalMovieId },
+      });
+
+      if (rating) {
+        await this.ratingRepository.delete({ userId, externalMovieId });
+      }
+    } catch (error) {
+      throw new Error(`Error removing rating: ${error.message}`);
+    }
+  }
+
   // Get average rating for movies
   async getAverageRatings(externalMovieIds: number[]): Promise<any> {
     if (!externalMovieIds.length) return [];

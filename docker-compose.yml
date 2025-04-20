@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  # Host port:Container port
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+    volumes:
+      - /app/node_modules
+    env_file:
+      - .env.docker
+    depends_on:
+      - db
+      - redis
+    command: ["sh", "./scripts/start.sh"]
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "${CASHE_PORT}:${CASHE_PORT}"

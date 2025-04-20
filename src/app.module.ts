@@ -18,6 +18,7 @@ import { WatchlistModule } from './modules/watchlist/watchlist.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
       expandVariables: true,
       load: [postgresDbConfig],
     }),

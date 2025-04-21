@@ -3,7 +3,6 @@ import { UserService } from '../user/user.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthJwtPayload } from './types/auth-jwtPayload';
-import { ConfigType } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {

@@ -8,7 +8,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('create-user')
-  @ApiOperation({ summary: 'Add or update a user' })
+  @ApiOperation({ summary: 'Add a user' })
   @ApiResponse({
     status: 200,
     description: 'User is added or updated successfully',

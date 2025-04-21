@@ -13,6 +13,7 @@ export class UserService {
 
   async create(addUserDto: AddUserDto) {
     //since we have a trigger to hash pwd, we should first create the user then save it to db
+    //here i am returning all the user obj even with password just to show hashing (ofc we shouldn't return password)
     const user = await this.userRepository.create(addUserDto);
     return await this.userRepository.save(user);
   }

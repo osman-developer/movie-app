@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AddUserDto } from './dto/addUser.dto';
 import { UserService } from './user.service';
 
@@ -17,6 +17,7 @@ export class UserController {
     status: 404,
     description: 'User not found',
   })
+  @ApiBody({type:AddUserDto})
   async create(@Body() addUserDto: AddUserDto) {
     return this.userService.create(addUserDto);
   }

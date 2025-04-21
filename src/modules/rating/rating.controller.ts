@@ -6,7 +6,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AddRatingDto } from './dto/addRating.dto';
 import { RatingsService } from './rating.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
@@ -22,6 +22,7 @@ export class RatingController {
     status: 200,
     description: 'Rating added or updated successfully',
   })
+  @ApiBody({ type: AddRatingDto })
   @ApiResponse({
     status: 404,
     description: 'User or Movie not found',

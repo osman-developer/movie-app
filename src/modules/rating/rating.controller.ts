@@ -4,11 +4,14 @@ import {
   Delete,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AddRatingDto } from './dto/addRating.dto';
 import { RatingsService } from './rating.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('rating')
 export class RatingController {
   constructor(private readonly ratingsService: RatingsService) {}

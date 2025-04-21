@@ -2,15 +2,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  JoinTable,
-  ManyToMany,
   OneToMany,
+  BeforeInsert,
 } from 'typeorm';
-import { Movie } from '../movie/movie.entity';
 import { Rating } from '../rating/rating.entity';
 import { Exclude } from 'class-transformer';
 import { Watchlist } from '../watchlist/watchlist.entity';
-
+import * as bcrypt from 'bcrypt';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
@@ -26,6 +24,15 @@ export class User {
   email: string;
 
   @Column()
+  name: string;
+
+  @Column()
   @Exclude()
   password: string;
+
+  //A trigger to hash password before inserting user
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 }

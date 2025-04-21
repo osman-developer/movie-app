@@ -28,7 +28,6 @@ export class LocalMoviesService {
     const cached = await this.cacheService.get<GetMovieDto>(cacheKey);
 
     if (cached) return cached;
-
     // No cache, fetch from DB
     const movie = await this.movieRepository.findOne({
       where: { externalId: movieId },
@@ -66,7 +65,6 @@ export class LocalMoviesService {
     const cached =
       await this.cacheService.get<PaginatedResponse<GetMovieDto>>(cacheKey);
     if (cached) return cached;
-
     // No cache, fetch from DB
     const qb = this.movieRepository
       .createQueryBuilder('movie')

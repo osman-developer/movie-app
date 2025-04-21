@@ -4,10 +4,10 @@ import { Movie } from '../movie/movie.entity';
 import { Rating } from './rating.entity';
 import { User } from '../user/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RedisCacheModule } from 'src/common/cache/cache.module';
+import { CachingModule } from 'src/common/cache/cache.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Movie, User, Rating]), RedisCacheModule],
+  imports: [TypeOrmModule.forFeature([Movie, User, Rating]), CachingModule],
   providers: [RatingsService],
   exports: [RatingsService],
 })

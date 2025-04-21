@@ -6,11 +6,13 @@ import {
   Param,
   ParseIntPipe,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { WatchlistService } from './watchlist.service';
 import { Watchlist } from './watchlist.entity';
-
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+@UseGuards(JwtAuthGuard)
 @ApiTags('Watchlist')
 @Controller('watchlist')
 export class WatchlistController {

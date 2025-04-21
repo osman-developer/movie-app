@@ -10,15 +10,17 @@ import { UserModule } from './modules/user/user.module';
 import { GenreModule } from './modules/genre/genre.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
-import { RedisCacheModule } from './common/cache/cache.module';
+import { CachingModule } from './common/cache/cache.module';
 import { RatingController } from './modules/rating/rating.controller';
 import { WatchlistModule } from './modules/watchlist/watchlist.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath:
+        process.env.NODE_ENV === 'production' ? '.env.docker' : '.env',
       expandVariables: true,
       load: [postgresDbConfig],
     }),
@@ -28,12 +30,13 @@ import { WatchlistModule } from './modules/watchlist/watchlist.module';
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
-    RedisCacheModule,
+    CachingModule,
     MovieModule,
     RatingModule,
     UserModule,
     GenreModule,
     WatchlistModule,
+    AuthModule,
   ],
   controllers: [AppController, RatingController],
   providers: [AppService],

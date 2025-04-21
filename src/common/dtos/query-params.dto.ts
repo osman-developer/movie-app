@@ -19,7 +19,7 @@ export class QueryParamsDto {
     if (!isNaN(parsedPageSize) && parsedPageSize > 0) {
       this.pageSize = Math.min(
         parsedPageSize,
-        PaginationConstants.MAX_PAGE_SIZE,
+        PaginationConstants.MAX_PAGE_SIZE, //to be on safe side to not overload my api if user enters a big nb
       );
     }
 

@@ -8,6 +8,6 @@ export class Genre {
   @Column({ unique: true })
   name: string;
 
-  @Column({ unique: true }) // Ensuring it's unique to avoid duplicates
-  externalId: number; // ID from the external API (e.g., TMDB)
+  @Column({ unique: true })
+  externalId: number; // ID from the external API (TMDB)
 }

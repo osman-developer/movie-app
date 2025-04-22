@@ -6,7 +6,8 @@ This project is a backend service developed with NestJS, designed to integrate w
 ## FEATURES:
 
 - Periodic synchronization (Scheduler/Cron job) with TMDB API (default every 12 hours, configurable)  
-- Movie listing with average rating calculation and support for pagination, searching, and filtering by genre  
+- Movie listing with average rating calculation and support for pagination, searching, and filtering by genre
+- On first run, the application calls the external API, and fills the tables with the retrieved data.
 - Movie rating  
 - User watchlist functionality  
 - API documentation via Swagger  
@@ -70,6 +71,21 @@ This project is a backend service developed with NestJS, designed to integrate w
     - `tmdb-sync`: (for sync with TMDB) contains dto, scheduler, module, service  
 - `docker-compose.yml`  
 - `Dockerfile`  
+
+
+## THINGS WE CAN ADD/IMPROVE:
+
+- Global Exception handling  
+- More Validations in functions & on properties  
+- Add more DTOs (read, create, update)  
+- Add more profile mappings to map entity & Dto  
+- Add refresh token  
+- Add OAuth  
+- Add Authorization  
+- Adjust the clearCache method to delete specific tracked cache keys  
+- For retrieved data by complex queries, we can enhance the caching mechanism so we store dynamic cache keys in sets grouped by the ID (e.g: in rating service, we only clear all the cache that is only related to a specific movie that got rated.)  
+- Add more API endpoints  
+
 
 ## NOTE:  
 This app is fully automated, you just need to run one of the following:
